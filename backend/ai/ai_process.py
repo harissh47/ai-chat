@@ -6,7 +6,7 @@ import subprocess
 from openai import OpenAI
 import os
 from settings.settings import settings
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+# client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 
 class ai_process():
@@ -15,13 +15,17 @@ class ai_process():
         self.scraper=web_scrape()
         self.settings=settings()
         # self.text=self.scraper.extract_text_only(url)
-        Name,API_KEY,URL=self.settings.get_settings()
+        
+        self.Name,self.API_KEY,self.URL=self.settings.get_settings().values()
+        
+
     def summary(self,url):
         data = self.scraper.extract_text_only(url)
-        if Name!="ollama":
-            client = OpenAI(api_key=API_KEY)
+        print(self.Name)
+        if self.Name!="ollama":
+            print("ollama is not selected")
         else:
-        
+            print("ai process is starting with ollama")
             prompt=f"Summarize the following text in a concise report:\n\n{data}"
             print(prompt)
             result=subprocess.run(
@@ -31,7 +35,9 @@ class ai_process():
              )
             print("result-------------------------------------------------------------------------------")
             print(result.stdout.decode("utf-8"))
-        self.settings.set_settings(Name,API_KEY,URL)
+            print("ai process is done with ollama")
+        # self.settings.set_settings(self.Name,self.API_KEY,self.URL)
+        
         return result.stdout.decode("utf-8")
         # print(prompt)
         # result=client.chat.completions.create(
